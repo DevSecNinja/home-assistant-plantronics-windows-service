@@ -31,5 +31,3 @@ while True:
 
     lastState = newState
     time.sleep(0.5)
-
-# TODO: Create Windows Service

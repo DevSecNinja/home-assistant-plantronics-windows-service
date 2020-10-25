@@ -18,9 +18,13 @@ class PLTDevice:
             response = r.read().decode("utf-8")
             print(response)
             response = json.loads(response)
-        if response["isError"] is False:
-            self.attached = True
-            self.session = response["Result"]
+            if response["isError"] is False:
+                self.attached = True
+                self.session = response["Result"]
+        else:
+            raise AssertionError(
+                "Response should have status code 200, but was:", r.status
+            )
 
     def release(self):
         self.ReleaseURL = "/Spokes/DeviceServices/Release?sess=" + self.session
@@ -32,6 +36,10 @@ class PLTDevice:
             if response["isError"] is False:
                 self.attached = False
                 self.session = None
+        else:
+            raise AssertionError(
+                "Response should have status code 200, but was:", r.status
+            )
 
     def get_events(self, queue=0):
         eventsURL = (
@@ -46,6 +54,10 @@ class PLTDevice:
             response = r.read().decode("utf-8")
             response = json.loads(response)
             print(response)
+        else:
+            raise AssertionError(
+                "Response should have status code 200, but was:", r.status
+            )
 
 
 class Spokes:
@@ -69,7 +81,11 @@ class Spokes:
                 print(response["Err"]["Description"])
             else:
                 self.deviceInfo = response
-        return self.deviceInfo
+            return self.deviceInfo
+        else:
+            raise AssertionError(
+                "Response should have status code 200, but was:", r.status
+            )
 
     def get_callmanager_state(self):
         self.conn.request("GET", self.CallManagerURL)
@@ -82,4 +98,8 @@ class Spokes:
                 print(response["Err"]["Description"])
             else:
                 self.callManagerInfo = response
-        return self.callManagerInfo
+            return self.callManagerInfo
+        else:
+            raise AssertionError(
+                "Response should have status code 200, but was:", r.status
+            )

@@ -42,13 +42,11 @@ class Sensor(HomeAssistant):
             ),
         )
 
-        if response.status_code == 200:
-            print(response.text)
-
-            responseJson = json.loads(response)
-            self.sensorInfo = responseJson
+        if response.status_code == 200 or response.status_code == 201:
+            self.sensorInfo = response.json
             return self.sensorInfo
         else:
             raise AssertionError(
-                "Response should have status code 200, but was:", response.status_code
+                "Response should have status code 200 or 201, but was:",
+                response.status_code,
             )
