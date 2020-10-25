@@ -1,0 +1,6 @@
+###### Requirements without Version Specifiers ######`
+setuptools
+flake8
+black
+
+###### Requirements with Version Specifiers ######`
