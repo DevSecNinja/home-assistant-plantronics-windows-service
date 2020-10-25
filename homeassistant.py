@@ -24,7 +24,7 @@ class Sensor(HomeAssistant):
         self.host = HomeAssistant().host + "/api/states/" + "sensor." + self.name
         self.accessToken = HomeAssistant().accessToken
         self.headers = {
-            "Authorization": self.accessToken,
+            "Authorization": ("Bearer " + self.accessToken),
             "content-type": "application/json",
         }
 
