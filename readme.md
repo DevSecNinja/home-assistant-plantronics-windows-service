@@ -14,7 +14,7 @@ pip install -r .\requirements.txt
 ````
 Make sure that the packages show up under `C:\Program Files (x86)\Python*\Lib\site-packages` as the Windows Service needs to access it.
 
-- Run the ![postinstall.py](https://github.com/mhammond/pywin32/blob/master/pywin32_postinstall.py) from the PowerShell console with administrator privileges.
+- Run the ![postinstall.py](https://github.com/mhammond/pywin32/blob/master/pywin32_postinstall.py) script from the PowerShell console with administrator privileges.
 
 - Clone or download the source code from this repository. Copy `secrets.example.json` to `secrets.json` and provide the required info.
 
@@ -27,7 +27,12 @@ python .\main.py --startup auto --wait 2 install
 ````
 
 ## Troubleshooting
-- Check if the service is started.
+- Check if the service is started. In PowerShell, run:
+```` powershell
+Get-Service -Name "HomeAssistantPlantronicsSync"
+Get-Service -Name "HomeAssistantPlantronicsSync" | Start-Service
+````
+
 - You can run the following code to debug the service:
 
 ```` powershell
