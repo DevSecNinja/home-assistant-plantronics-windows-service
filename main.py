@@ -14,10 +14,12 @@ lastState = spo.get_callmanager_state()["Result"]["HasActiveCall"]
 while True:
     newState = spo.get_callmanager_state()["Result"]["HasActiveCall"]
     logging.debug(
-        "Comparing last activate call state:",
-        lastState,
-        "with new call state:",
-        newState,
+        (
+            "Comparing last activate call state:"
+            + lastState
+            + "with new call state:"
+            + newState
+        )
     )
 
     if lastState != newState:
