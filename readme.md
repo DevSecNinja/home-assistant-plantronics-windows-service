@@ -34,5 +34,7 @@ python .\main.py --startup auto --wait 2 install
 python .\main.py --startup auto --wait 2 debug
 ````
 
-- In case you receive the error `Error starting service: The service did not respond to the start or control request in a timely fashion` during the start of the service, make sure to have the `pywintypes36.dll` file available from the `C:\Program Files (x86)\Python*\Lib\site-packages\win32` folder. In case the file is missing, copy it from the `C:\Program Files (x86)\Python*\Lib\site-packages\pywin32_system32` folder.
+- In case you receive the error `Error starting service: The service did not respond to the start or control request in a timely fashion` during the start of the service,
+make sure to have the `pywintypes36.dll` file available from the `C:\Program Files (x86)\Python*\Lib\site-packages\win32` folder. In case the file is missing,
+copy it from the `C:\Program Files (x86)\Python*\Lib\site-packages\pywin32_system32` folder.
 - Open up an issue within this repository in case your issue is not listed here or listed as a closed issue.

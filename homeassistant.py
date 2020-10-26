@@ -69,5 +69,5 @@ class Sensor(HomeAssistant):
 
         except Exception as e:
             logging.critical(
-                "Failed to update Home Assistant sensor. Exception:", str(e)
+                ("Failed to update Home Assistant sensor. Exception:" + str(e))
             )
