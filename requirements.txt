@@ -3,5 +3,6 @@ setuptools
 flake8
 black
 requests
+pywin32
 
 ###### Requirements with Version Specifiers ######`

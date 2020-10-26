@@ -1,6 +1,7 @@
 from requests import get
 
 import json
+import logging
 
 
 class PLTDevice:
@@ -18,7 +19,7 @@ class PLTDevice:
         r = get(self.AttachURL)
 
         if r.status_code == 200:
-            print(r.text)
+            logging.debug(r.text)
             if r.json()["isError"] is False:
                 self.attached = True
                 self.session = r.json()["Result"]
@@ -54,7 +55,7 @@ class PLTDevice:
 
         r = get(self.EventsURL)
         if r.status_code == 200:
-            print(r.json())
+            logging.debug(r.json())
         else:
             raise AssertionError(
                 "Response should have status code 200, but was:", r.status
@@ -75,7 +76,7 @@ class Spokes:
         r = get(self.DeviceInfoURL)
         if r.status_code == 200:
             if r.json()["isError"] is True:
-                print(r.json()["Err"]["Description"])
+                logging.debug(r.json()["Err"]["Description"])
             else:
                 self.deviceInfo = r.json()
             return self.deviceInfo
@@ -88,7 +89,7 @@ class Spokes:
         r = get(self.CallManagerURL)
         if r.status_code == 200:
             if r.json()["isError"] is True:
-                print(r.json()["Err"]["Description"])
+                logging.debug(r.json()["Err"]["Description"])
             else:
                 self.callManagerInfo = r.json()
             return self.callManagerInfo

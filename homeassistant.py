@@ -1,4 +1,8 @@
 import json
+import os
+import sys
+import logging
+
 from plantronics import Spokes
 from requests import post
 
@@ -6,13 +10,15 @@ from requests import post
 class HomeAssistant:
     def __init__(self):
         try:
-            with open("./secrets.json") as secrets_file:
+            with open(os.path.join(sys.path[0], "secrets.json")) as secrets_file:
                 secrets_data = json.load(secrets_file)
         except IOError:
-            print(
-                "The secrets.json file does not exist.",
-                "Copy secrets.example.json and rename it to secrets.json.",
-                "Make sure to edit the placeholder",
+            logging.debug(
+                (
+                    "The secrets.json file does not exist.",
+                    "Copy secrets.example.json and rename it to secrets.json.",
+                    "Make sure to edit the placeholder",
+                )
             )
             raise
 
@@ -62,4 +68,6 @@ class Sensor(HomeAssistant):
                 )
 
         except Exception as e:
-            print("Failed to update Home Assistant sensor. Exception:", e)
+            logging.critical(
+                ("Failed to update Home Assistant sensor. Exception:" + str(e))
+            )
