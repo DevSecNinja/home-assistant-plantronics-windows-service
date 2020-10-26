@@ -31,15 +31,16 @@ class PlantronicsService(SMWinservice):
             logging.debug(
                 (
                     "Comparing last activate call state:"
-                    + self.lastState
+                    + str(self.lastState)
                     + "with new call state:"
-                    + self.newState
+                    + str(self.newState)
                 )
             )
 
             if self.lastState != self.newState:
                 logging.debug(
-                    "Updating Home Assistant API with new call state:", self.newState
+                    "Updating Home Assistant API with new call state:",
+                    str(self.newState),
                 )
 
                 if self.newState is True:
