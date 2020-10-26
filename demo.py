@@ -16,6 +16,7 @@ dev.attach()
 try:
     while True:
         dev.get_events()
+        spo.get_callmanager_state()
         time.sleep(1)
 
 finally:

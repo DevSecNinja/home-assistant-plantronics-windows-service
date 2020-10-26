@@ -28,7 +28,8 @@ class HomeAssistant:
 
 class Sensor(HomeAssistant):
     def __init__(self):
-        self.name = Spokes().get_device_info()["Result"]["ProductName"]
+        self.spo = Spokes()
+        self.name = self.spo.get_device_info()["Result"]["ProductName"]
         self.friendlyName = self.name + " Adapter"
         self.icon = "mdi:headset"
 
@@ -44,6 +45,13 @@ class Sensor(HomeAssistant):
         }
 
         try:
+            self.source = self.spo.get_callmanager_state()["Result"]["Calls"][0][
+                "Source"
+            ]
+        except Exception:
+            self.source = None
+
+        try:
             response = post(
                 url=self.host,
                 headers=self.headers,
@@ -53,6 +61,7 @@ class Sensor(HomeAssistant):
                         "attributes": {
                             "friendly_name": sen.friendlyName,
                             "icon": sen.icon,
+                            "source": self.source,
                         },
                     }
                 ),
