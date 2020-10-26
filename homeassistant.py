@@ -39,6 +39,7 @@ class Sensor(HomeAssistant):
         self.name = str(sen.name).replace(" ", "_")
         self.host = HomeAssistant().host + "/api/states/" + "sensor." + self.name
         self.accessToken = HomeAssistant().accessToken
+        self.computerName = os.environ["COMPUTERNAME"]
         self.headers = {
             "Authorization": ("Bearer " + self.accessToken),
             "content-type": "application/json",
@@ -62,6 +63,7 @@ class Sensor(HomeAssistant):
                             "friendly_name": sen.friendlyName,
                             "icon": sen.icon,
                             "source": self.source,
+                            "computer_name": self.computerName,
                         },
                     }
                 ),
