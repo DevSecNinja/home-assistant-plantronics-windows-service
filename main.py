@@ -1,3 +1,4 @@
+"Gets output from Plantronics Hub API and sends it to Home Assistant"
 from plantronics import Spokes
 from homeassistant import Sensor
 from requests import post
@@ -5,13 +6,13 @@ from requests import post
 import time
 import logging
 
-s = Spokes()
+spo = Spokes()
 sen = Sensor()
-lastState = s.get_callmanager_state()["Result"]["HasActiveCall"]
+lastState = spo.get_callmanager_state()["Result"]["HasActiveCall"]
 
 # Continuously check Plantronics Call Manager State
 while True:
-    newState = s.get_callmanager_state()["Result"]["HasActiveCall"]
+    newState = spo.get_callmanager_state()["Result"]["HasActiveCall"]
     logging.debug(
         "Comparing last activate call state:",
         lastState,

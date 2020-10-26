@@ -1,39 +1,41 @@
-from http.client import HTTPConnection
+from requests import get
 
 import json
 
 
 class PLTDevice:
     def __init__(self, spokes, uid):
-        self.AttachURL = "/Spokes/DeviceServices/Attach?uid=" + uid
+        self.host = "127.0.0.1"
+        self.port = "32017"
+        self.BaseURL = "http://" + self.host + ":" + self.port
+        self.AttachURL = self.BaseURL + "/Spokes/DeviceServices/Attach?uid=" + uid
         self.attached = False
         self.session = None
         self.uid = uid
         self.spokes = spokes
 
     def attach(self):
-        self.spokes.conn.request("GET", self.AttachURL)
-        r = self.spokes.conn.getresponse()
-        if r.status == 200:
-            response = r.read().decode("utf-8")
-            print(response)
-            response = json.loads(response)
-            if response["isError"] is False:
+        r = get(self.AttachURL)
+
+        if r.status_code == 200:
+            print(r.text)
+            if r.json()["isError"] is False:
                 self.attached = True
-                self.session = response["Result"]
+                self.session = r.json()["Result"]
         else:
             raise AssertionError(
                 "Response should have status code 200, but was:", r.status
             )
 
     def release(self):
-        self.ReleaseURL = "/Spokes/DeviceServices/Release?sess=" + self.session
-        self.spokes.conn.request("GET", self.ReleaseURL)
-        r = self.spokes.conn.getresponse()
-        if r.status == 200:
-            response = r.read().decode("utf-8")
-            response = json.loads(response)
-            if response["isError"] is False:
+        self.ReleaseURL = (
+            self.spokes.BaseURL + "/Spokes/DeviceServices/Release?sess=" + self.session
+        )
+
+        r = get(self.ReleaseURL)
+
+        if r.status_code == 200:
+            if r.json()["isError"] is False:
                 self.attached = False
                 self.session = None
         else:
@@ -42,18 +44,17 @@ class PLTDevice:
             )
 
     def get_events(self, queue=0):
-        eventsURL = (
-            "/Spokes/DeviceServices/Events?sess="
+        self.EventsURL = (
+            self.spokes.BaseURL
+            + "/Spokes/DeviceServices/Events?sess="
             + self.session
             + "&queue="
             + str(queue)
         )
-        self.spokes.conn.request("GET", eventsURL)
-        r = self.spokes.conn.getresponse()
-        if r.status == 200:
-            response = r.read().decode("utf-8")
-            response = json.loads(response)
-            print(response)
+
+        r = get(self.EventsURL)
+        if r.status_code == 200:
+            print(r.json())
         else:
             raise AssertionError(
                 "Response should have status code 200, but was:", r.status
@@ -64,23 +65,19 @@ class Spokes:
     def __init__(self):
         self.host = "127.0.0.1"
         self.port = "32017"
-        self.conn = HTTPConnection(self.host + ":" + self.port)
-        self.DeviceInfoURL = "/Spokes/DeviceServices/Info"
-        self.CallManagerURL = "/Spokes/CallServices/CallManagerState"
+        self.BaseURL = "http://" + self.host + ":" + self.port
+        self.DeviceInfoURL = self.BaseURL + "/Spokes/DeviceServices/Info"
+        self.CallManagerURL = self.BaseURL + "/Spokes/CallServices/CallManagerState"
         self.deviceInfo = None
         self.callManagerInfo = None
 
     def get_device_info(self):
-        self.conn.request("GET", self.DeviceInfoURL)
-        r = self.conn.getresponse()
-        if r.status == 200:
-            response = r.read()
-            str_response = response.decode("utf-8")
-            response = json.loads(str_response)
-            if response["isError"] is True:
-                print(response["Err"]["Description"])
+        r = get(self.DeviceInfoURL)
+        if r.status_code == 200:
+            if r.json()["isError"] is True:
+                print(r.json()["Err"]["Description"])
             else:
-                self.deviceInfo = response
+                self.deviceInfo = r.json()
             return self.deviceInfo
         else:
             raise AssertionError(
@@ -88,16 +85,12 @@ class Spokes:
             )
 
     def get_callmanager_state(self):
-        self.conn.request("GET", self.CallManagerURL)
-        r = self.conn.getresponse()
-        if r.status == 200:
-            response = r.read()
-            str_response = response.decode("utf-8")
-            response = json.loads(str_response)
-            if response["isError"] is True:
-                print(response["Err"]["Description"])
+        r = get(self.CallManagerURL)
+        if r.status_code == 200:
+            if r.json()["isError"] is True:
+                print(r.json()["Err"]["Description"])
             else:
-                self.callManagerInfo = response
+                self.callManagerInfo = r.json()
             return self.callManagerInfo
         else:
             raise AssertionError(
