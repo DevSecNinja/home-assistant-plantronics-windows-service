@@ -2,6 +2,8 @@
 
 Welcome! This Python based Windows Service communicates the status of your Plantronics headset to Home Assistant.
 
+![Image of Plantronics state in Home Assistant](src/images/plantronics-state.png?raw=true)
+
 ## Requirements
 - Python 3.* installed and added to PATH
 - Plantronics Hub
