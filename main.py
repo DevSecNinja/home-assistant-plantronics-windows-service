@@ -16,9 +16,9 @@ while True:
     logging.debug(
         (
             "Comparing last activate call state:"
-            + lastState
+            + str(lastState)
             + "with new call state:"
-            + newState
+            + str(newState)
         )
     )
 
