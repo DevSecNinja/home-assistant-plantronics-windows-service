@@ -1,6 +1,13 @@
 """Demo file to display what can be done with the Plantronics Hub API."""
-from plantronics import Spokes, PLTDevice
 import time
+import sys
+import logging
+
+from plantronics import Spokes, PLTDevice
+
+# Ensure info log is forwarded to stdout and visible on console
+# Changge logging.info to logging.debug in case you want the debug log to output to console
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 spo = Spokes()
 dev = PLTDevice(spo, "0123456789")

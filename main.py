@@ -1,13 +1,15 @@
 "Gets output from Plantronics Hub API and sends it to Home Assistant"
-from plantronics import Spokes
-from homeassistant import Sensor
-from requests import post
-
-from pathlib import Path
-from winservice import SMWinservice
-
 import time
 import logging
+import sys
+
+from plantronics import Spokes
+from homeassistant import Sensor
+from winservice import SMWinservice
+
+# Ensure info log is forwarded to stdout and visible on console
+# Changge logging.info to logging.debug in case you want the debug log to output to console
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 class PlantronicsService(SMWinservice):
@@ -28,19 +30,19 @@ class PlantronicsService(SMWinservice):
 
         while self.isrunning:
             self.newState = self.spo.get_callmanager_state()["Result"]["HasActiveCall"]
-            logging.debug(
+            logging.info(
                 (
-                    "Comparing last activate call state:"
+                    "Comparing last activate call state: "
                     + str(self.lastState)
-                    + "with new call state:"
+                    + " with new call state: "
                     + str(self.newState)
                 )
             )
 
             if self.lastState != self.newState:
-                logging.debug(
+                logging.info(
                     (
-                        "Updating Home Assistant API with new call state:"
+                        "Updating Home Assistant API with new call state: "
                         + str(self.newState)
                     )
                 )

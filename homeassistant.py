@@ -13,7 +13,7 @@ class HomeAssistant:
             with open(os.path.join(sys.path[0], "secrets.json")) as secrets_file:
                 secrets_data = json.load(secrets_file)
         except IOError:
-            logging.debug(
+            logging.error(
                 (
                     "The secrets.json file does not exist.",
                     "Copy secrets.example.json and rename it to secrets.json.",
@@ -68,17 +68,14 @@ class Sensor(HomeAssistant):
                     }
                 ),
             )
-
+        except ConnectionError as e:
+            logging.warn("Request to Home Assistant failed", e)
+        finally:
             if response.status_code == 200 or response.status_code == 201:
                 self.sensorInfo = response.json
                 return self.sensorInfo
             else:
-                raise AssertionError(
+                logging.error(
                     "Response should have status code 200 or 201, but was:",
                     response.status_code,
                 )
-
-        except Exception as e:
-            logging.critical(
-                ("Failed to update Home Assistant sensor. Exception:" + str(e))
-            )
