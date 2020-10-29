@@ -20,6 +20,7 @@ class PLTDevice:
             r = get(self.AttachURL)
         except ConnectionError as e:
             logging.warn("Request to local Plantronics API failed", e)
+            pass
 
         if r.status_code == 200:
             logging.info(r.text)
@@ -37,6 +38,7 @@ class PLTDevice:
             r = get(self.ReleaseURL)
         except ConnectionError as e:
             logging.warn("Request to local Plantronics API failed", e)
+            pass
 
         if r.status_code == 200:
             if r.json()["isError"] is False:
@@ -57,6 +59,7 @@ class PLTDevice:
             r = get(self.EventsURL)
         except ConnectionError as e:
             logging.warn("Request to local Plantronics API failed", e)
+            pass
 
         if r.status_code == 200:
             logging.info(r.json())
@@ -79,6 +82,7 @@ class Spokes:
             r = get(self.DeviceInfoURL)
         except ConnectionError as e:
             logging.warn("Request to local Plantronics API failed", e)
+            pass
 
         if r.status_code == 200:
             if r.json()["isError"] is True:
@@ -94,6 +98,7 @@ class Spokes:
             r = get(self.CallManagerURL)
         except ConnectionError as e:
             logging.warn("Request to local Plantronics API failed", e)
+            pass
 
         if r.status_code == 200:
             if r.json()["isError"] is True:

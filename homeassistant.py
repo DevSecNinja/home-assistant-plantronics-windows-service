@@ -70,6 +70,7 @@ class Sensor(HomeAssistant):
             )
         except ConnectionError as e:
             logging.warn("Request to Home Assistant failed", e)
+            pass
         finally:
             if response.status_code == 200 or response.status_code == 201:
                 self.sensorInfo = response.json
