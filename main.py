@@ -26,6 +26,11 @@ class PlantronicsService(SMWinservice):
     def main(self):
         self.spo = Spokes()
         self.sen = Sensor()
+
+        # Set initial sensor value
+        logging.info("Starting service... setting initial value of sensor to 'off'")
+        self.sen.set_sensor("off")
+
         self.lastState = self.spo.get_callmanager_state()["Result"]["HasActiveCall"]
 
         while self.isrunning:
