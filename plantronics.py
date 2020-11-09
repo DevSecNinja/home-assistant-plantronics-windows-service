@@ -1,4 +1,4 @@
-from requests import get
+from functions import get_http_result
 
 import json
 import logging
@@ -16,36 +16,22 @@ class PLTDevice:
         self.spokes = spokes
 
     def attach(self):
-        try:
-            r = get(self.AttachURL)
-        except ConnectionError as e:
-            logging.warn("Request to local Plantronics API failed", e)
-            pass
+        r = get_http_result(self.AttachURL)
 
-        if r.status_code == 200:
-            logging.info(r.text)
-            if r.json()["isError"] is False:
-                self.attached = True
-                self.session = r.json()["Result"]
-        else:
-            logging.error("Response should have status code 200, but was:", r.status)
+        logging.info(r.text)
+        if r.json()["isError"] is False:
+            self.attached = True
+            self.session = r.json()["Result"]
 
     def release(self):
         self.ReleaseURL = (
             self.spokes.BaseURL + "/Spokes/DeviceServices/Release?sess=" + self.session
         )
-        try:
-            r = get(self.ReleaseURL)
-        except ConnectionError as e:
-            logging.warn("Request to local Plantronics API failed", e)
-            pass
+        r = get_http_result(self.ReleaseURL)
 
-        if r.status_code == 200:
-            if r.json()["isError"] is False:
-                self.attached = False
-                self.session = None
-        else:
-            logging.error("Response should have status code 200, but was:", r.status)
+        if r.json()["isError"] is False:
+            self.attached = False
+            self.session = None
 
     def get_events(self, queue=0):
         self.EventsURL = (
@@ -55,16 +41,9 @@ class PLTDevice:
             + "&queue="
             + str(queue)
         )
-        try:
-            r = get(self.EventsURL)
-        except ConnectionError as e:
-            logging.warn("Request to local Plantronics API failed", e)
-            pass
+        r = get_http_result(self.EventsURL)
 
-        if r.status_code == 200:
-            logging.info(r.json())
-        else:
-            logging.error("Response should have status code 200, but was:", r.status)
+        logging.info(r.json())
 
 
 class Spokes:
@@ -78,33 +57,19 @@ class Spokes:
         self.callManagerInfo = None
 
     def get_device_info(self):
-        try:
-            r = get(self.DeviceInfoURL)
-        except ConnectionError as e:
-            logging.warn("Request to local Plantronics API failed", e)
-            pass
+        r = get_http_result(self.DeviceInfoURL)
 
-        if r.status_code == 200:
-            if r.json()["isError"] is True:
-                logging.warn(r.json()["Err"]["Description"])
-            else:
-                self.deviceInfo = r.json()
-            return self.deviceInfo
+        if r.json()["isError"] is True:
+            logging.warn(r.json()["Err"]["Description"])
         else:
-            logging.error("Response should have status code 200, but was:", r.status)
+            self.deviceInfo = r.json()
+        return self.deviceInfo
 
     def get_callmanager_state(self):
-        try:
-            r = get(self.CallManagerURL)
-        except ConnectionError as e:
-            logging.warn("Request to local Plantronics API failed", e)
-            pass
+        r = get_http_result(self.CallManagerURL)
 
-        if r.status_code == 200:
-            if r.json()["isError"] is True:
-                logging.warn(r.json()["Err"]["Description"])
-            else:
-                self.callManagerInfo = r.json()
-            return self.callManagerInfo
+        if r.json()["isError"] is True:
+            logging.warn(r.json()["Err"]["Description"])
         else:
-            logging.error("Response should have status code 200, but was:", r.status)
+            self.callManagerInfo = r.json()
+        return self.callManagerInfo

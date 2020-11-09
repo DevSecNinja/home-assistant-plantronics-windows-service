@@ -5,6 +5,7 @@ import logging
 
 from plantronics import Spokes
 from requests import post
+from requests.exceptions import ConnectionError
 
 
 class HomeAssistant:
@@ -68,8 +69,8 @@ class Sensor(HomeAssistant):
                     }
                 ),
             )
-        except ConnectionError as e:
-            logging.warn("Request to Home Assistant failed", e)
+        except ConnectionError:
+            logging.warn("Request to Home Assistant failed")
             pass
         finally:
             if response.status_code == 200 or response.status_code == 201:
