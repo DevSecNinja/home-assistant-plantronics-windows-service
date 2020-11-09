@@ -1,9 +1,9 @@
 """Demo file to display what can be done with the Plantronics Hub API."""
-import time
-import sys
 import logging
+import sys
+import time
 
-from plantronics import Spokes, PLTDevice
+from plantronics import PLTDevice, Spokes
 
 # Ensure info log is forwarded to stdout and visible on console
 # Changge logging.info to logging.debug in case you want the debug log to output to console

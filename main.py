@@ -1,10 +1,10 @@
 "Gets output from Plantronics Hub API and sends it to Home Assistant"
-import time
 import logging
 import sys
+import time
 
-from plantronics import Spokes
 from homeassistant import Sensor
+from plantronics import Spokes
 from winservice import SMWinservice
 
 # Ensure info log is forwarded to stdout and visible on console

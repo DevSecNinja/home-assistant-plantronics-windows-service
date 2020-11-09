@@ -1,7 +1,7 @@
-from functions import get_http_result
-
 import json
 import logging
+
+from functions import get_http_result
 
 
 class PLTDevice:

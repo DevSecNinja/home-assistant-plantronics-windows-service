@@ -1,7 +1,7 @@
 import json
+import logging
 import os
 import sys
-import logging
 
 from plantronics import Spokes
 from requests import post
@@ -78,6 +78,5 @@ class Sensor(HomeAssistant):
                 return self.sensorInfo
             else:
                 logging.error(
-                    "Response should have status code 200 or 201, but was:",
-                    response.status_code,
+                    f"Response should have status code 200 or 201, but was: {response.status_code}"
                 )
